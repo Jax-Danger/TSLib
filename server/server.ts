@@ -1,3 +1,4 @@
+// Below are the events for the client side exports of the script:
 onNet("Handcuff", (target: number) => {
   console.log("cuffing...", target);
   emitNet("Handcuff", target);

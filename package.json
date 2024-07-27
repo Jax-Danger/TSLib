@@ -14,6 +14,10 @@
 		"@citizenfx/server": "^2.0.6947-1",
 		"@types/node": "^20.8.9",
 		"esbuild": "^0.19.5",
+		"json5": "^2.2.3",
 		"typescript": "^5.2.2"
+	},
+	"dependencies": {
+		"@types/json5": "^0.0.30"
 	}
 }

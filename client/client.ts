@@ -4,16 +4,23 @@ const TSLib = global.exports["TSLib"];
 
 /* Below is a more optimized way to get a player's distance from a set of coordinates: 
 Usage: global.exports['TSLib'].getDistance(coords1, coords2) */
-exports("getDistance", (coords1: number[], coords2: number[]): number => {
-  const dx = coords1[0] - coords2[0];
-  const dy = coords1[1] - coords2[1];
-  const dz = coords1[2] - coords2[2];
-  return Math.sqrt(dx * dx + dy * dy + dz * dz);
-});
+global.exports(
+  "getDistance",
+  (coords1: number[], coords2: number[]): number => {
+    const dx = coords1[0] - coords2[0];
+    const dy = coords1[1] - coords2[1];
+    const dz = coords1[2] - coords2[2];
+    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    console.log(
+      `getDistance: coords1=${coords1}, coords2=${coords2}, distance=${distance}`
+    );
+    return distance;
+  }
+);
 
 /* Below is for getting the closest player to a set of coordinates:
  Usage: global.exports['TSLib'].getClosestPlayer(coords, maxDistance) */
-exports("getClosestPlayer", (coords: any, maxDistance: number) => {
+function getClosestPlayer(coords: any, maxDistance: number) {
   const players = GetActivePlayers();
   let closestId: number = -1;
   let closestPed: any = null;
@@ -36,12 +43,15 @@ exports("getClosestPlayer", (coords: any, maxDistance: number) => {
       }
     }
   }
-  return { closestId, closestPed, closestCoords };
-});
 
+  return { closestId, closestPed, closestCoords };
+}
+
+// Export the function using FiveM's global.exports system
+global.exports("getClosestPlayer", getClosestPlayer);
 /* Below is for loading an animation dictionary:
  Usage: global.exports['TSLib'].loadAnimDict(dict) */
-exports("loadAnimDict", async (dict: string) => {
+global.exports("loadAnimDict", async (dict: string) => {
   RequestAnimDict(dict);
   while (!HasAnimDictLoaded(dict)) {
     await Delay(100);
@@ -51,9 +61,9 @@ exports("loadAnimDict", async (dict: string) => {
 /* Below is for handcuffing a player:
  Usage: global.exports['TSLib].Handcuff() */
 let handcuff = false; // Variable to keep track of handcuff status
-exports("Handcuff", async () => {
+global.exports("Handcuff", async () => {
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = exports["MP-Police"].getClosestPlayer(
+  const nearestPlayer = global.exports["MP-Police"].getClosestPlayer(
     playerCoords,
     2.0
   );
@@ -93,9 +103,9 @@ onNet("Handcuff", async () => {
 
 /* Below is for uncuffing a player:
  Usage: global.exports['TSLib'].RemoveHandcuffs() */
-exports("RemoveHandcuffs", async () => {
+global.exports("RemoveHandcuffs", async () => {
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = exports["MP-Police"].getClosestPlayer(
+  const nearestPlayer = global.exports["MP-Police"].getClosestPlayer(
     playerCoords,
     2.0
   );
@@ -126,10 +136,10 @@ let drag: boolean = false;
 
 /* Below is for dragging a player:
  Usage: global.exports['TSLib'].DragPlayer() */
-exports("DragPlayer", () => {
+global.exports("DragPlayer", () => {
   console.log("dragging player");
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = exports["MP-Police"].getClosestPlayer(
+  const nearestPlayer = global.exports["MP-Police"].getClosestPlayer(
     playerCoords,
     2.0
   );
