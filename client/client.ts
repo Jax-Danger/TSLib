@@ -12,7 +12,7 @@ global.exports(
     const dz = coords1[2] - coords2[2];
     const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
     console.log(
-      `getDistance: coords1=${coords1}, coords2=${coords2}, distance=${distance}`
+      `getDistance has returned coords1=${coords1}, coords2=${coords2}, distance=${distance}`
     );
     return distance;
   }
@@ -20,7 +20,7 @@ global.exports(
 
 /* Below is for getting the closest player to a set of coordinates:
  Usage: global.exports['TSLib'].getClosestPlayer(coords, maxDistance) */
-function getClosestPlayer(coords: any, maxDistance: number) {
+global.exports("getClosestPlayer", (coords: any, maxDistance: number) => {
   const players = GetActivePlayers();
   let closestId: number = -1;
   let closestPed: any = null;
@@ -45,10 +45,7 @@ function getClosestPlayer(coords: any, maxDistance: number) {
   }
 
   return { closestId, closestPed, closestCoords };
-}
-
-// Export the function using FiveM's global.exports system
-global.exports("getClosestPlayer", getClosestPlayer);
+});
 /* Below is for loading an animation dictionary:
  Usage: global.exports['TSLib'].loadAnimDict(dict) */
 global.exports("loadAnimDict", async (dict: string) => {
@@ -151,7 +148,7 @@ global.exports("DragPlayer", () => {
     // Emit to server with both source (dragger) and target (draggee) IDs
     emitNet("Drag", serverId, GetPlayerServerId(PlayerId()));
   } else {
-    console.log("No player found within the specified distance.");
+    console.log("There is no player nearby!");
   }
 });
 /* This event is part of the DragPlayer export.
