@@ -30,3 +30,13 @@ onNet("ForceOutOfVehicle", (target: number, index: number) => {
   console.log("forcing out of vehicle...", target);
   emitNet("ForceOutOfVehicle", target, index);
 });
+
+onNet("ForceIntoVehicle", (target: number, index: number) => {
+  console.log("Forcing into vehicle...", target);
+  emitNet("ForceIntoVehicle", target, target, index);
+});
+
+onNet("ForceOutOfVehicle", (target: number, index: number) => {
+  console.log("forcing out of vehicle...", target);
+  emitNet("ForceOutOfVehicle", target, index);
+});

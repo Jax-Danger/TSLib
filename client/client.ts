@@ -168,3 +168,76 @@ onNet("Drag", (target: number, dragger: number) => {
     }
   }
 });
+
+exports("ForceIntoVehicle", () => {
+  const playerPed = PlayerPedId();
+  const plCoords = GetEntityCoords(playerPed, true);
+  const nearestPlayer = exports["MP-Police"].getClosestPlayer(plCoords, 2.0);
+  const closestPlayer = nearestPlayer.closestId;
+  console.log(closestPlayer, GetPlayerServerId(closestPlayer));
+  if (closestPlayer <= 0) {
+    return emit("MP-Elements:SendNotification", 2, "No player found", 500);
+  }
+  emitNet("ForceIntoVehicle", GetPlayerServerId(closestPlayer), closestPlayer);
+});
+
+onNet("ForceIntoVehicle", (target: number, index: number) => {
+  console.log(1);
+  // Assuming target is a player index, get the ped handle for the target player
+  const targetPed = GetPlayerPed(index);
+  const playerPed = PlayerPedId();
+  const plCoords = GetEntityCoords(playerPed, true);
+  const [x, y, z] = [plCoords[0], plCoords[1], plCoords[2]];
+  const vehicle = GetClosestVehicle(x, y, z, 5, 0, 127); // Get the closest vehicle within 5 units
+  console.log(vehicle);
+  if (vehicle) {
+    console.log(2);
+    const vehicleCoords = GetEntityCoords(vehicle, true);
+    const distance = GetDistanceBetweenCoords(
+      plCoords[0],
+      plCoords[1],
+      plCoords[2],
+      vehicleCoords[0],
+      vehicleCoords[1],
+      vehicleCoords[2],
+      true
+    );
+
+    if (distance < 5) {
+      console.log(targetPed);
+      console.log(`Warping player ${target} into seat: 2`);
+      // Use targetPed instead of target to correctly warp the ped into the vehicle
+      TaskWarpPedIntoVehicle(targetPed, vehicle, 2);
+    }
+  } else {
+    console.log("No vehicle available or no nearest player found.");
+  }
+});
+
+exports("ForceOutOfVehicle", () => {
+  const playerPed = PlayerPedId();
+  const plCoords = GetEntityCoords(playerPed, true);
+  const nearestPlayer = exports["MP-Police"].getClosestPlayer(plCoords, 2.0);
+  const closestPlayer = nearestPlayer.closestId;
+  console.log(closestPlayer, GetPlayerServerId(closestPlayer));
+  if (closestPlayer <= 0) {
+    return emit("MP-Elements:SendNotification", 2, "No player found", 500);
+  }
+  emitNet("ForceOutOfVehicle", GetPlayerServerId(closestPlayer), closestPlayer);
+});
+
+onNet("ForceOutOfVehicle", (index: number) => {
+  console.log("Attempting to remove player from vehicle");
+  const playerPed = GetPlayerPed(index);
+  const vehicle = GetVehiclePedIsIn(playerPed, true); // Get the vehicle the player is in, if any
+
+  if (vehicle !== 0) {
+    // Check if the player is in a vehicle by checking if vehicle is not 0
+    console.log("Player is in a vehicle, attempting to remove...");
+    setImmediate(() => {
+      TaskLeaveAnyVehicle(playerPed, vehicle, 16); // Use the vehicle variable directly
+    });
+  } else {
+    console.log("Player is not in a vehicle.");
+  }
+});
