@@ -60,10 +60,7 @@ global.exports("loadAnimDict", async (dict: string) => {
 let handcuff = false; // Variable to keep track of handcuff status
 global.exports("Handcuff", async () => {
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = global.exports["TSLib"].getClosestPlayer(
-    playerCoords,
-    2.0
-  );
+  const nearestPlayer = TSLib.getClosestPlayer(playerCoords, 2.0);
   const nearestPlayerId = nearestPlayer.closestId;
 
   if (nearestPlayerId !== -1) {
@@ -102,10 +99,7 @@ onNet("Handcuff", async () => {
  Usage: global.exports['TSLib'].RemoveHandcuffs() */
 global.exports("RemoveHandcuffs", async () => {
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = global.exports["TSLib"].getClosestPlayer(
-    playerCoords,
-    2.0
-  );
+  const nearestPlayer = TSLib.getClosestPlayer(playerCoords, 2.0);
   const nearestPlayerId = nearestPlayer.closestId;
 
   if (nearestPlayerId !== -1) {
@@ -136,10 +130,7 @@ let drag: boolean = false;
 global.exports("DragPlayer", () => {
   console.log("dragging player");
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = global.exports["TSLib"].getClosestPlayer(
-    playerCoords,
-    2.0
-  );
+  const nearestPlayer = TSLib.getClosestPlayer(playerCoords, 2.0);
   const nearestPlayerId = nearestPlayer.closestId;
 
   if (nearestPlayerId !== -1) {
@@ -176,7 +167,7 @@ exports("ForceIntoVehicle", () => {
   const closestPlayer = nearestPlayer.closestId;
   console.log(closestPlayer, GetPlayerServerId(closestPlayer));
   if (closestPlayer <= 0) {
-    return emit("MP-Elements:SendNotification", 2, "No player found", 500);
+    return console.log("No player found");
   }
   emitNet("ForceIntoVehicle", GetPlayerServerId(closestPlayer), closestPlayer);
 });
@@ -221,7 +212,7 @@ exports("ForceOutOfVehicle", () => {
   const closestPlayer = nearestPlayer.closestId;
   console.log(closestPlayer, GetPlayerServerId(closestPlayer));
   if (closestPlayer <= 0) {
-    return emit("MP-Elements:SendNotification", 2, "No player found", 500);
+    return console.log("No player found");
   }
   emitNet("ForceOutOfVehicle", GetPlayerServerId(closestPlayer), closestPlayer);
 });
@@ -234,9 +225,7 @@ onNet("ForceOutOfVehicle", (index: number) => {
   if (vehicle !== 0) {
     // Check if the player is in a vehicle by checking if vehicle is not 0
     console.log("Player is in a vehicle, attempting to remove...");
-    setImmediate(() => {
-      TaskLeaveAnyVehicle(playerPed, vehicle, 16); // Use the vehicle variable directly
-    });
+    TaskLeaveAnyVehicle(playerPed, vehicle, 16); // Use the vehicle variable directly
   } else {
     console.log("Player is not in a vehicle.");
   }
