@@ -60,7 +60,7 @@ global.exports("loadAnimDict", async (dict: string) => {
 let handcuff = false; // Variable to keep track of handcuff status
 global.exports("Handcuff", async () => {
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = global.exports["MP-Police"].getClosestPlayer(
+  const nearestPlayer = global.exports["TSLib"].getClosestPlayer(
     playerCoords,
     2.0
   );
@@ -102,7 +102,7 @@ onNet("Handcuff", async () => {
  Usage: global.exports['TSLib'].RemoveHandcuffs() */
 global.exports("RemoveHandcuffs", async () => {
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = global.exports["MP-Police"].getClosestPlayer(
+  const nearestPlayer = global.exports["TSLib"].getClosestPlayer(
     playerCoords,
     2.0
   );
@@ -136,7 +136,7 @@ let drag: boolean = false;
 global.exports("DragPlayer", () => {
   console.log("dragging player");
   const playerCoords = GetEntityCoords(PlayerPedId(), true);
-  const nearestPlayer = global.exports["MP-Police"].getClosestPlayer(
+  const nearestPlayer = global.exports["TSLib"].getClosestPlayer(
     playerCoords,
     2.0
   );
@@ -172,7 +172,7 @@ onNet("Drag", (target: number, dragger: number) => {
 exports("ForceIntoVehicle", () => {
   const playerPed = PlayerPedId();
   const plCoords = GetEntityCoords(playerPed, true);
-  const nearestPlayer = exports["MP-Police"].getClosestPlayer(plCoords, 2.0);
+  const nearestPlayer = exports["TSLib"].getClosestPlayer(plCoords, 2.0);
   const closestPlayer = nearestPlayer.closestId;
   console.log(closestPlayer, GetPlayerServerId(closestPlayer));
   if (closestPlayer <= 0) {
@@ -217,7 +217,7 @@ onNet("ForceIntoVehicle", (target: number, index: number) => {
 exports("ForceOutOfVehicle", () => {
   const playerPed = PlayerPedId();
   const plCoords = GetEntityCoords(playerPed, true);
-  const nearestPlayer = exports["MP-Police"].getClosestPlayer(plCoords, 2.0);
+  const nearestPlayer = exports["TSLib"].getClosestPlayer(plCoords, 2.0);
   const closestPlayer = nearestPlayer.closestId;
   console.log(closestPlayer, GetPlayerServerId(closestPlayer));
   if (closestPlayer <= 0) {
